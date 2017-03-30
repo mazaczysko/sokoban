@@ -4,18 +4,32 @@
 #include <ncurses.h>
 #include <inttypes.h>
 
-#define TILE_COUNT 1
+#define TILE_COUNT 7
 #define TILE_AIR 0
-
+#define TILE_PLAYER 1
+#define TILE_SOCKET 2
+#define TILE_BOX 3
+#define TILE_SOCKETPLAYER 4
+#define TILE_SOCKETBOX 5
+#define TILE_WALL 6
 typedef struct
 {
 	uint16_t id;
+	uint8_t fg, bg;
 	char chr;
+
 } Tile;
 
 Tile tiles[TILE_COUNT] =
 {
-	{TILE_AIR, 'a' }
+	{TILE_AIR, 			0, 	0, 	' ' },
+	{TILE_PLAYER, 		7, 	0, 	'@' },
+	{TILE_SOCKET,		0, 	4, 	' '	},
+	{TILE_BOX, 			2, 	0, 	'#' },
+	{TILE_SOCKETPLAYER,	7,	4,	'@' },
+	{TILE_SOCKETBOX,	3,	5, 	'#'	},
+	{TILE_WALL,			0,	6,	' ' }
+
 };
 
 struct
@@ -57,7 +71,7 @@ int main()
 		fprintf( stderr, "error: terminal doesn't support colors\n" );
 	}
 	mapInit( );
-	map.map[0][0].chr = 'x';
+	map.map[0][0] = tiles[TILE_BOX];
 	mapDraw( );
 	getch( );
 	endwin( );
