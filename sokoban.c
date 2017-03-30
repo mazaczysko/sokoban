@@ -22,12 +22,12 @@ typedef struct
 
 Tile tiles[TILE_COUNT] =
 {
-	{TILE_AIR, 			0, 	0, 	' ' },
-	{TILE_PLAYER, 		7, 	0, 	'@' },
-	{TILE_SOCKET,		0, 	4, 	' '	},
-	{TILE_BOX, 			2, 	0, 	'#' },
+	{TILE_AIR,			0,	0,	' ' },
+	{TILE_PLAYER,		7,	0,	'@' },
+	{TILE_SOCKET,		0,	4,	' '	},
+	{TILE_BOX,			2,	0,	'#' },
 	{TILE_SOCKETPLAYER,	7,	4,	'@' },
-	{TILE_SOCKETBOX,	3,	5, 	'#'	},
+	{TILE_SOCKETBOX,	3,	5,	'#'	},
 	{TILE_WALL,			0,	6,	' ' }
 
 };
