@@ -4,14 +4,6 @@
 #include <ncurses.h>
 #include <inttypes.h>
 
-#define TILE_COUNT 7
-#define TILE_AIR 0
-#define TILE_PLAYER 1
-#define TILE_SOCKET 2
-#define TILE_BOX 3
-#define TILE_SOCKETPLAYER 4
-#define TILE_SOCKETBOX 5
-#define TILE_WALL 6
 typedef struct
 {
 	uint16_t id;
@@ -19,20 +11,16 @@ typedef struct
 	char chr;
 
 } Tile;
+//								ID	FG	BG	CHAR
+const Tile TILE_AIR = 			{0,	0,	0,	' ' };
+const Tile TILE_PLAYER = 		{1,	7,	0,	'@' };
+const Tile TILE_SOCKET = 		{2,	0,	4,	' '	};
+const Tile TILE_BOX = 			{3,	2,	0,	'#' };
+const Tile TILE_SOCKETPLAYER = 	{4,	7,	4,	'@' };
+const Tile TILE_SOCKETBOX = 	{5,	3,	5,	'#'	};
+const Tile TILE_WALL = 			{6,	0,	6,	' ' };
 
-Tile tiles[TILE_COUNT] =
-{
-	{TILE_AIR,			0,	0,	' ' },
-	{TILE_PLAYER,		7,	0,	'@' },
-	{TILE_SOCKET,		0,	4,	' '	},
-	{TILE_BOX,			2,	0,	'#' },
-	{TILE_SOCKETPLAYER,	7,	4,	'@' },
-	{TILE_SOCKETBOX,	3,	5,	'#'	},
-	{TILE_WALL,			0,	6,	' ' }
-
-};
-
-struct
+struct map
 {
 	uint16_t width, height;
 	Tile **map;
@@ -71,7 +59,7 @@ int main()
 		fprintf( stderr, "error: terminal doesn't support colors\n" );
 	}
 	mapInit( );
-	map.map[0][0] = tiles[TILE_BOX];
+	map.map[0][0] = TILE_BOX;
 	mapDraw( );
 	getch( );
 	endwin( );
