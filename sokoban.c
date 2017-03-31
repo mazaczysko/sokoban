@@ -47,6 +47,16 @@ void mapDraw()
 	}
 }
 
+void colorsInit( )
+{
+
+	uint16_t fg, bg;
+
+	for ( fg = 0; fg < 8; fg++ )
+		for ( bg = 0; bg < 8; bg++ )
+			init_pair( fg * 8 + bg, fg, bg );
+}
+
 int main()
 {
 	if( initscr() == NULL )
