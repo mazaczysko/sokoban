@@ -171,6 +171,22 @@ int tileMove( uint16_t x, uint16_t y, int8_t dx, int8_t dy )
 	return 0;
 }
 
+void getPlayerPos( uint16_t *x, uint16_t *y )
+{
+	uint16_t i, j;
+
+	//Find player
+	if ( y == NULL || x == NULL ) return;
+	for ( i = 0; i < map.height; i++ )
+		for ( j = 0; j < map.width; j++ )
+			if ( map.map[j][i].id == TILE_SOCKETPLAYER_ID || map.map[j][i].id == TILE_PLAYER_ID )
+			{
+				*x = j;
+				*y = i;
+				return;
+			}
+}
+
 int main()
 {
 	if( initscr() == NULL )
