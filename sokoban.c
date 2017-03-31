@@ -43,8 +43,14 @@ void mapDraw()
 	for( i = 0; i < map.height; i++ )
 	{
 		for( j = 0; j < map.width; j++ )
+		{
+			attron( COLOR_PAIR( map.map[j][i].fg * 8 + map.map[j][i].bg ) );
 			mvprintw( i, j, "%c", map.map[j][i].chr );
+			attroff( COLOR_PAIR( map.map[j][i].fg * 8 + map.map[j][i].bg ) );
+		}
+
 	}
+
 }
 
 void colorsInit( )
@@ -68,8 +74,12 @@ int main()
 	{
 		fprintf( stderr, "error: terminal doesn't support colors\n" );
 	}
+	start_color();
+	colorsInit( );
 	mapInit( );
-	map.map[0][0] = TILE_BOX;
+	map.map[0][0] = TILE_SOCKETBOX;
+	map.map[1][0] = TILE_WALL;
+	map.map[0][1] = TILE_PLAYER;
 	mapDraw( );
 	getch( );
 	endwin( );
