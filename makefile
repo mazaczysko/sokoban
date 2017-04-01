@@ -1,2 +1,2 @@
 all:
-	gcc -o sokoban sokoban.c map.c -Wall -lncurses -g
+	gcc -o sokoban src/sokoban.c src/map.c -Wall -lncurses 
