@@ -257,6 +257,47 @@ uint8_t mapLoad( const char *fname)
 	return 0;
 }
 
+uint16_t gameLoop( )
+{
+
+	//Main game loop
+	uint8_t run = 1;
+	uint16_t px, py;
+
+	//Full draw
+	clear( );
+	mapDraw( );
+
+	while( run )
+	{
+		getPlayerPos( &px, &py ); //Player position
+
+		switch( tolower( getch( ) ) ) //Move player tile depending on key pressed
+		{
+			case 'a':
+				tileMove( px, py, -1, 0 );
+				break;
+
+			case 'd':
+				tileMove ( px, py, 1, 0 );
+				break;
+
+			case 'w':
+				tileMove ( px, py, 0, -1 );
+				break;
+
+			case 's':
+				tileMove ( px, py, 0, 1 );
+				break;
+
+			case 'q':
+				run = 0;
+				break;
+		}
+	}
+	return 0;
+}
+
 int main()
 {
 	if( initscr() == NULL )
