@@ -226,11 +226,11 @@ uint8_t mapLoad( const char *fname)
 					t = TILE_WALL;
 					break;
 
-			case '&':
+			case '.':
 					t = TILE_SOCKET;
 					break;
 
-			case '#':
+			case '&':
 					t = TILE_BOX;
 					break;
 
