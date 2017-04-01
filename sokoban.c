@@ -265,11 +265,14 @@ uint16_t gameLoop( )
 	uint16_t px, py;
 
 	//Full draw
-	clear( );
-	mapDraw( );
+	//clear( );
+	//mapDraw( );
 
 	while( run )
 	{
+		clear( );
+		mapDraw( );
+	
 		getPlayerPos( &px, &py ); //Player position
 
 		switch( tolower( getch( ) ) ) //Move player tile depending on key pressed
@@ -298,7 +301,7 @@ uint16_t gameLoop( )
 	return 0;
 }
 
-int main( int arg, char **level )
+int main( int argc, char **argv )
 {
 	if( initscr() == NULL )
 	{
@@ -310,10 +313,12 @@ int main( int arg, char **level )
 		fprintf( stderr, "error: terminal doesn't support colors\n" );
 	}
 	start_color();
+	curs_set( 0 );
+	noecho( );
 	colorsInit( );
 	mapInit( );
 	mapDraw( );
-	mapLoad( level[1] );
+	mapLoad( argv[1] );
 	gameLoop( );
 	getch( );
 	endwin( );
