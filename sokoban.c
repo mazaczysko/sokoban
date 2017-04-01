@@ -298,7 +298,7 @@ uint16_t gameLoop( )
 	return 0;
 }
 
-int main()
+int main( int arg, char **level )
 {
 	if( initscr() == NULL )
 	{
@@ -313,6 +313,8 @@ int main()
 	colorsInit( );
 	mapInit( );
 	mapDraw( );
+	mapLoad( level[1] );
+	gameLoop( );
 	getch( );
 	endwin( );
 	return 0;
