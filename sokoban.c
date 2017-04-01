@@ -187,6 +187,76 @@ void getPlayerPos( uint16_t *x, uint16_t *y )
 			}
 }
 
+uint8_t mapLoad( const char *fname)
+
+{
+	int c;
+	uint16_t x = 0, y = 0;
+	Tile t;
+	FILE *f;
+
+	//Open file
+	if ( fname == NULL || ( f = fopen( fname, "r" ) ) == NULL ) return 1;
+
+	//Read character by character
+	while ( ( c = getc( f ) ) != EOF )
+	{
+		//Check level size, if bigger than terminal - abort
+		if (x >= map.width || y >= map.height )
+		{
+			fprintf ( stderr, "Level too big!\n");
+			return 1;
+		}
+
+		//Switching characters into tiles
+		switch ( ( char ) c )
+		{
+			case '\r':
+			case '\n':
+				x = 0;
+				y++;
+				continue;
+				break;
+
+			case '@':
+					t = TILE_PLAYER;
+					break;
+
+			case 'w':
+					t = TILE_WALL;
+					break;
+
+			case '&':
+					t = TILE_SOCKET;
+					break;
+
+			case '#':
+					t = TILE_BOX;
+					break;
+
+			case 'P':
+					t = TILE_SOCKETPLAYER;
+					break;
+
+			case 'B':
+					t = TILE_SOCKETBOX;
+
+			//e.g. space
+			default:
+				t = TILE_AIR;
+				break;
+
+		}
+
+		//writing tiles into map
+		map.map[x++][y] = t;
+	}
+
+	//End reading
+	fclose( f );
+	return 0;
+}
+
 int main()
 {
 	if( initscr() == NULL )
