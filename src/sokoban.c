@@ -5,6 +5,13 @@
 #include <inttypes.h>
 #include "map.h"
 
+void gfxEnd( )
+{
+	curs_set( 1 );
+	echo( );
+	endwin( );
+}
+
 void colorsInit( )
 {
 
@@ -30,6 +37,9 @@ uint16_t gameLoop( )
 	{
 		clear( );
 		mapDraw( );
+
+		if ( checkWinner( ) == 1 )
+			return 1;
 
 		getPlayerPos( &px, &py ); //Player position
 
@@ -76,8 +86,14 @@ int main( int argc, char **argv )
 	colorsInit( );
 	mapInit( );
 	mapDraw( );
-	mapLoad( argv[1] );
+	if ( ( mapLoad( argv[1] ) ) != MAP_OK)
+	{
+		gfxEnd( );
+		fprintf(stderr, "bad player count!\n");
+		return 1;
+
+	}
 	gameLoop( );
-	endwin( );
+	gfxEnd( );
 	return 0;
 }

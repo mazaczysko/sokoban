@@ -46,7 +46,7 @@ uint8_t mapLoad( const char *fname )
 
 {
 	int c;
-	uint16_t x = 0, y = 0;
+	uint16_t x = 0, y = 0, pcnt = 0;
 	Tile t;
 	FILE *f;
 
@@ -62,7 +62,12 @@ uint8_t mapLoad( const char *fname )
 			fprintf ( stderr, "Level too big!\n");
 			return 1;
 		}
-
+		//Check player count, if different from 1, abort
+		if( pcnt != 1 )
+		{
+			fprintf( stderr, "Player count different from 1");
+			return 1;
+		}
 		//Switching characters into tiles
 		switch ( ( char ) c )
 		{
@@ -75,6 +80,7 @@ uint8_t mapLoad( const char *fname )
 
 			case '@':
 					t = TILE_PLAYER;
+					pcnt++;
 					break;
 
 			case 'w':
@@ -91,6 +97,7 @@ uint8_t mapLoad( const char *fname )
 
 			case 'P':
 					t = TILE_SOCKETPLAYER;
+					pcnt++;
 					break;
 
 			case 'B':
@@ -226,4 +233,14 @@ int tileMove( uint16_t x, uint16_t y, int8_t dx, int8_t dy )
 	}
 
 	return 0;
+}
+
+uint8_t checkWinner( )
+{
+	uint16_t i, j, cnt = 0;
+
+		for( i = 0; i < map.width; i++ )
+			for( j = 0; j < map.height; j++ )
+				cnt += map.map[i][j].id == TILE_BOX_ID;
+	return !cnt;
 }

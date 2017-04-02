@@ -9,6 +9,7 @@
 #define TILE_SOCKETPLAYER_ID 4
 #define TILE_SOCKETBOX_ID 5
 #define TILE_WALL_ID 6
+#define MAP_OK 0
 
 typedef struct
 {
@@ -27,6 +28,7 @@ typedef struct
 extern Map map;
 extern void mapInit( );
 extern void mapDraw( );
+extern uint8_t checkWinner( );
 extern uint8_t mapLoad( const char *fname );
 extern void getPlayerPos( uint16_t *x, uint16_t *y );
 extern int tileMove( uint16_t x, uint16_t y, int8_t dx, int8_t dy );
