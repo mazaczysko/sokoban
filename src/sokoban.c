@@ -28,6 +28,7 @@ uint16_t gameLoop( )
 	//Main game loop
 	uint8_t run = 1;
 	uint16_t px, py;
+	uint16_t stpcnt = 0;
 
 	//Full draw
 	//clear( );
@@ -35,38 +36,52 @@ uint16_t gameLoop( )
 
 	while( run )
 	{
+
 		clear( );
 		mapDraw( );
 
 		if ( checkWinner( ) == 1 )
 		{
-			gfxEnd( );
-			printf("You won $$$\n");
-			return 10;
+			clear( );
+			wbkgd( stdscr, COLOR_PAIR( 3 ) );
+			attron( COLOR_PAIR( 14 ) );
+			mvprintw(map.height/2 - 2, map.width/2-9, "##################");
+			mvprintw(map.height/2 - 1, map.width/2-9, "#    YOU  WON    #");
+			mvprintw(map.height/2    , map.width/2-9, "#       in       #");
+			mvprintw(map.height/2 + 1, map.width/2-9, "#   %04d  steps  #", stpcnt);
+			mvprintw(map.height/2 + 2, map.width/2-9, "##################");
+			attroff( COLOR_PAIR( 14 ) );
+			attron( COLOR_PAIR( 3 ) );
+			mvprintw(map.height/2 + 5, map.width/2-12," Press any key to exit...");
+			attroff( COLOR_PAIR( 3 ) );
+			getch( );
+			return 0;
 		}
-
 		getPlayerPos( &px, &py ); //Player position
 
 		switch( tolower( getch( ) ) ) //Move player tile depending on key pressed
 		{
 			case 'a':
-				tileMove( px, py, -1, 0 );
+				stpcnt += tileMove( px, py, -1, 0 );
 				break;
 
 			case 'd':
-				tileMove ( px, py, 1, 0 );
+				stpcnt += tileMove ( px, py, 1, 0 );
 				break;
 
 			case 'w':
-				tileMove ( px, py, 0, -1 );
+				stpcnt += tileMove ( px, py, 0, -1 );
 				break;
 
 			case 's':
-				tileMove ( px, py, 0, 1 );
+				stpcnt += tileMove ( px, py, 0, 1 );
 				break;
 
 			case 'q':
 				run = 0;
+				break;
+
+			default:
 				break;
 		}
 	}
