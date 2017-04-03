@@ -39,7 +39,11 @@ uint16_t gameLoop( )
 		mapDraw( );
 
 		if ( checkWinner( ) == 1 )
-			return 1;
+		{
+			gfxEnd( );
+			printf("You won $$$\n");
+			return 10;
+		}
 
 		getPlayerPos( &px, &py ); //Player position
 
@@ -71,14 +75,14 @@ uint16_t gameLoop( )
 
 int main( int argc, char **argv )
 {
+	uint16_t ec = 0;
 	if( initscr() == NULL )
 	{
-		fprintf(stderr, "error: cannot run ncurses mode\n");
-		return 0;
+		return 1;
 	}
 	if( has_colors( ) == FALSE )
 	{
-		fprintf( stderr, "error: terminal doesn't support colors\n" );
+		return 1;
 	}
 	start_color();
 	curs_set( 0 );
@@ -86,12 +90,23 @@ int main( int argc, char **argv )
 	colorsInit( );
 	mapInit( );
 	mapDraw( );
-	if ( ( mapLoad( argv[1] ) ) != MAP_OK)
+	if ( ( ec = mapLoad( argv[1] ) ) != MAP_OK)
 	{
 		gfxEnd( );
-		fprintf(stderr, "bad player count!\n");
-		return 1;
+		switch ( ec )
+		{
+			case MAP_ERR_PCNT:
+				fprintf(stderr, "err %d: wrong player count!\n", ec);
+				break;
 
+			case MAP_ERR_FILE:
+				fprintf(stderr, "err %d: cannot open level file!\n", ec );
+				break;
+
+			case MAP_ERR_SIZE:
+				fprintf(stderr, "err %d: wrong map size!\n", ec );
+		}
+		return 1;
 	}
 	gameLoop( );
 	gfxEnd( );

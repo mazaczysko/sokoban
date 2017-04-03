@@ -9,7 +9,11 @@
 #define TILE_SOCKETPLAYER_ID 4
 #define TILE_SOCKETBOX_ID 5
 #define TILE_WALL_ID 6
+
 #define MAP_OK 0
+#define MAP_ERR_FILE 2
+#define MAP_ERR_SIZE 3
+#define MAP_ERR_PCNT 4
 
 typedef struct
 {

@@ -43,7 +43,6 @@ void mapDraw()
 }
 
 uint8_t mapLoad( const char *fname )
-
 {
 	int c;
 	uint16_t x = 0, y = 0, pcnt = 0;
@@ -51,7 +50,8 @@ uint8_t mapLoad( const char *fname )
 	FILE *f;
 
 	//Open file
-	if ( fname == NULL || ( f = fopen( fname, "r" ) ) == NULL ) return 1;
+	if ( fname == NULL || ( f = fopen( fname, "r" ) ) == NULL )
+		return MAP_ERR_FILE;
 
 	//Read character by character
 	while ( ( c = getc( f ) ) != EOF )
@@ -59,14 +59,7 @@ uint8_t mapLoad( const char *fname )
 		//Check level size, if bigger than terminal - abort
 		if (x >= map.width || y >= map.height )
 		{
-			fprintf ( stderr, "Level too big!\n");
-			return 1;
-		}
-		//Check player count, if different from 1, abort
-		if( pcnt != 1 )
-		{
-			fprintf( stderr, "Player count different from 1");
-			return 1;
+			return MAP_ERR_SIZE;
 		}
 		//Switching characters into tiles
 		switch ( ( char ) c )
@@ -102,7 +95,7 @@ uint8_t mapLoad( const char *fname )
 
 			case 'B':
 					t = TILE_SOCKETBOX;
-
+					break;
 			//e.g. space
 			default:
 				t = TILE_AIR;
@@ -114,9 +107,15 @@ uint8_t mapLoad( const char *fname )
 		map.map[x++][y] = t;
 	}
 
+	//Check player count, if different from 1, abort
+	if( pcnt != 1 )
+	{
+		return MAP_ERR_PCNT;
+	}
+
 	//End reading
 	fclose( f );
-	return 0;
+	return MAP_OK;
 }
 
 void getPlayerPos( uint16_t *x, uint16_t *y )
