@@ -3,6 +3,8 @@
 #include <ctype.h>
 #include <ncurses.h>
 #include <inttypes.h>
+#include <time.h>
+#include <sys/time.h>
 #include "map.h"
 
 void gfxEnd( )
@@ -26,13 +28,13 @@ uint16_t gameLoop( )
 {
 
 	//Main game loop
+	struct timeval tval_before, tval_after, tval_result;
 	uint8_t run = 1;
 	uint16_t px, py;
 	uint16_t stpcnt = 0;
 
 	//Full draw
-	//clear( );
-	//mapDraw( );
+	gettimeofday(&tval_before, NULL);
 
 	while( run )
 	{
@@ -42,15 +44,18 @@ uint16_t gameLoop( )
 
 		if ( checkWinner( ) == 1 )
 		{
+			gettimeofday(&tval_after, NULL);
+			timersub(&tval_after, &tval_before, &tval_result);
 			clear( );
 			wbkgd( stdscr, COLOR_PAIR( 3 ) );
-			attron( COLOR_PAIR( 14 ) );
-			mvprintw(map.height/2 - 2, map.width/2-9, "##################");
-			mvprintw(map.height/2 - 1, map.width/2-9, "#    YOU  WON    #");
-			mvprintw(map.height/2    , map.width/2-9, "#       in       #");
-			mvprintw(map.height/2 + 1, map.width/2-9, "#   %04d  steps  #", stpcnt);
-			mvprintw(map.height/2 + 2, map.width/2-9, "##################");
-			attroff( COLOR_PAIR( 14 ) );
+			attron( COLOR_PAIR( 5 ) );
+			mvprintw(map.height/2 - 3, map.width/2-9, "####################");
+			mvprintw(map.height/2 - 2, map.width/2-9, "#     YOU  WON     #");
+			mvprintw(map.height/2 - 1, map.width/2-9, "#        in        #");
+			mvprintw(map.height/2    , map.width/2-9, "#    %04d  steps   #", stpcnt);
+			mvprintw(map.height/2 + 2, map.width/2-9, "####################");
+			mvprintw(map.height/2 + 1, map.width/2-9,"# Time : %ld.%02lds #\n", (long int)tval_result.tv_sec, (long int)tval_result.tv_usec);
+			attroff( COLOR_PAIR( 5 ) );
 			attron( COLOR_PAIR( 3 ) );
 			mvprintw(map.height/2 + 5, map.width/2-12," Press any key to exit...");
 			attroff( COLOR_PAIR( 3 ) );
