@@ -5,8 +5,14 @@
 #include <inttypes.h>
 #include <time.h>
 #include <sys/time.h>
+#include <string.h>
+#include <unistd.h>
 #include "map.h"
 
+int cntrPrnt( uint16_t y, const char* txt )
+{
+	return mvprintw( y, map.width/2 - strlen( txt )/2, txt );
+}
 void gfxEnd( )
 {
 	curs_set( 1 );
@@ -47,19 +53,16 @@ uint16_t gameLoop( )
 			gettimeofday(&tval_after, NULL);
 			timersub(&tval_after, &tval_before, &tval_result);
 			clear( );
-			wbkgd( stdscr, COLOR_PAIR( 3 ) );
-			attron( COLOR_PAIR( 5 ) );
-			mvprintw(map.height/2 - 3, map.width/2-9, "####################");
-			mvprintw(map.height/2 - 2, map.width/2-9, "#     YOU  WON     #");
-			mvprintw(map.height/2 - 1, map.width/2-9, "#        in        #");
-			mvprintw(map.height/2    , map.width/2-9, "#    %04d  steps   #", stpcnt);
-			mvprintw(map.height/2 + 2, map.width/2-9, "####################");
-			mvprintw(map.height/2 + 1, map.width/2-9,"# Time : %ld.%02lds #\n", (long int)tval_result.tv_sec, (long int)tval_result.tv_usec);
-			attroff( COLOR_PAIR( 5 ) );
-			attron( COLOR_PAIR( 3 ) );
-			mvprintw(map.height/2 + 5, map.width/2-12," Press any key to exit...");
-			attroff( COLOR_PAIR( 3 ) );
+			wbkgd( stdscr, COLOR_PAIR( 24 ) );
+
+			char *buf = (char*) malloc( map.width );
+			if ( buf == NULL ) fprintf( stderr, "dupagównozjebałosię\n" );
+			
+			snprintf( buf, map.width, "YOU WON" ) && cntrPrnt( map.height/2-2 ,buf );
+			snprintf( buf, map.width, "STEPS: %d", stpcnt ) && cntrPrnt( map.height/2 ,buf );
+			snprintf( buf, map.width, "TIME: %ld.%02lds", (long int)tval_result.tv_sec, (long int)tval_result.tv_usec ) && cntrPrnt( map.height/2+2 ,buf );
 			getch( );
+			attroff( COLOR_PAIR( 24 ) );
 			return 0;
 		}
 		getPlayerPos( &px, &py ); //Player position
